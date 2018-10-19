@@ -1,39 +1,22 @@
+#include <stdio.h>
 
-#include <cstdio>
-#include <stdlib.h>
-#include <string.h>
-
-enum color{
-    red,yellow,blue
-};
-color c[3]={red,yellow,blue};
-
-void swap(color** a,color** b){//元素为指向color的指针的指针
-    color *c=*a;
-    *a=*b;
-    *b=c;
-}
-
-color inspect(color* elem){
-    return *elem;
-}
-
-void holland(color* pc[],int n){
-    //rr:已分为红色块的最后一块下标 bh:已分为蓝色块的第一块下标
-    int rr=-1,bh=n,i=0;
-    while (i<bh) {
-        switch (inspect(pc[i])) {
-            case red: swap(pc+i++, pc+(++rr)); break;
-            case blue: swap(pc+i, pc+--bh); break;
-            case yellow: i++; break;
-        }
-    }
+void sort(int* p,int n){
+    if(n<=1)return;
+    int mini=0,tmp;
+    for(int i=0;i<n;i++)//找到n个中最小数的下标
+        if(p[mini]>p[i])
+            mini=i;
+    tmp=p[mini];
+    p[mini]=p[0];
+    p[0]=tmp;
+    sort(p+1,n-1);
 }
 
 int main(){
-    color* pc[]={&c[1],&c[0],&c[0],&c[2],&c[1],&c[2],&c[0],&c[2]};
-    //for(int i=0;i<100;i++)pc[i]=&c[rand()%3];
-    holland(pc, sizeof(pc)/sizeof(pc[0]));
-    for(int i=0;i<sizeof(pc)/sizeof(pc[0]);i++)
-        printf("%d ",inspect(pc[i]));
+    int p[9]={9,7,2,0,3,3,2,9,4};
+    for(int i=0;i<9;i++)printf("%d ",p[i]);
+    puts("");
+    sort(p,9);
+    
+    for(int i=0;i<9;i++)printf("%d ",p[i]);
 }

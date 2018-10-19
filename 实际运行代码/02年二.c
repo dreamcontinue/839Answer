@@ -12,29 +12,37 @@ void split(LNode* L,LNode** L1,LNode** L2){
     (*L1)->next=NULL;
     *L2=(LNode*)malloc(sizeof(LNode));
     (*L2)->next=NULL;
-    LNode* LN1=*L1,*LN2=*L2;
+    if(!L)return;
+    L=L->next;
+    LNode* LN1=*L1,*LN2=*L2,**tmp;
     int index=0;
     while(L){
-        if(L->data<index++){
-            LN1->next=(LNode*)malloc(sizeof(LNode));
-            LN1=LN1->next;
-            LN1->data=L->data;
-            LN1->next=NULL;
-        }else{
-            LN2->next=(LNode*)malloc(sizeof(LNode));
-            LN2=LN2->next;
-            LN2->data=L->data;
-            LN2->next=NULL;
-        }
+        tmp=L->data<index++?&LN1:&LN2;
+        (*tmp)->next=(LNode*)malloc(sizeof(LNode));
+        *tmp=(*tmp)->next;
+        (*tmp)->data=L->data;
+        (*tmp)->next=NULL;
+        //        if(L->data<index++){
+        //            LN1->next=(LNode*)malloc(sizeof(LNode));
+        //            LN1=LN1->next;
+        //            LN1->data=L->data;
+        //            LN1->next=NULL;
+        //        }else{
+        //            LN2->next=(LNode*)malloc(sizeof(LNode));
+        //            LN2=LN2->next;
+        //            LN2->data=L->data;
+        //            LN2->next=NULL;
+        //        }
         L=L->next;
     }
 }
+
 
 int main(){
     LNode *Head=(LNode*)malloc(sizeof(LNode));
     Head->next=NULL;
     LNode *node=Head;
-    for(int i=0;i<10;i++){
+    for(int i=0;i<20;i++){
         node->next=(LNode*)malloc(sizeof(LNode));
         node=node->next;
         node->data=rand()%1000-500;
@@ -42,6 +50,7 @@ int main(){
     }
     LNode *L1,*L2;
     split(Head,&L1,&L2);
+    
     Head=Head->next;
     L1=L1->next;
     L2=L2->next;
@@ -50,7 +59,7 @@ int main(){
         Head=Head->next;
     }
     printf("END");
-
+    
     printf("\nL1:\n");
     while(L1){
         printf("%d-->",L1->data);
